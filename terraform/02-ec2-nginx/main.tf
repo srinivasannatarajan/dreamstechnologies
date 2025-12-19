@@ -109,7 +109,7 @@ resource "aws_instance" "nginx_server" {
               </head>
               <body>
                   <div class="container">
-                      <h1>🚀 Nginx is Running!</h1>
+                      <h1> Nginx is Running!</h1>
                       <p>Dreams Technologies DevOps Assignment</p>
                       <p>Deployed via Terraform with User Data</p>
                   </div>
