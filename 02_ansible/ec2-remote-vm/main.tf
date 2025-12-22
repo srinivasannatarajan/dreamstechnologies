@@ -31,7 +31,7 @@ data "aws_ami" "amazon_linux_2" {
 
 # Create a security group for the EC2 instance
 resource "aws_security_group" "nginx_sg" {
-  name        = "nginx-web-server-sg"
+  name        = "remote-vm-ansible-sg"
   description = "Security group for remote VM"
 
   # Allow HTTP traffic
