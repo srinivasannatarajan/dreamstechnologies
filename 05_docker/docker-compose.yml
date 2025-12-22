@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  flask-app:
+    build: ./flask-app
+    ports:
+      - "5000:5000"
+    container_name: flask-app
+
+  nginx-static:
+    build: ./nginx-static
+    ports:
+      - "8080:80"
+    container_name: nginx-static
+
+  nodejs-app:
+    build: ./nodejs-multistage
+    ports:
+      - "3000:80"
+    container_name: nodejs-app

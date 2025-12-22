@@ -1,0 +1,75 @@
+---
+# Ansible Playbook: System Update with Conditional Reboot
+# Challenge 3: Update packages and reboot if kernel was updated
+
+- name: System Update and Conditional Reboot
+  hosts: all
+  become: yes
+
+  vars:
+    reboot_timeout: 600
+
+  tasks:
+    - name: Get current kernel version (pre-update)
+      shell: uname -r
+      register: kernel_before
+      changed_when: false
+
+    - name: Display current kernel version
+      debug:
+        msg: "Current kernel version: {{ kernel_before.stdout }}"
+
+    - name: Update all packages
+      shell: yum update -y
+      register: yum_update
+      changed_when: "'Nothing to do' not in yum_update.stdout"
+
+    - name: Check if kernel packages were updated
+      shell: |
+        rpm -qa --last | grep kernel | head -5 | grep "$(date +%a)"
+      register: kernel_updated_redhat
+      changed_when: false
+      failed_when: false
+
+    - name: Set reboot flag
+      set_fact:
+        needs_reboot: "{{ kernel_updated_redhat.rc == 0 }}"
+
+    - name: Display reboot requirement
+      debug:
+        msg: "{{ 'Reboot required - kernel was updated' if needs_reboot else 'No reboot required' }}"
+
+    - name: Reboot the host if kernel was updated
+      reboot:
+        msg: "Rebooting due to kernel update"
+        connect_timeout: 5
+        reboot_timeout: "{{ reboot_timeout }}"
+        pre_reboot_delay: 0
+        post_reboot_delay: 30
+        test_command: uptime
+      when: needs_reboot | default(false)
+
+    - name: Wait for system to become reachable
+      wait_for_connection:
+        delay: 10
+        timeout: 300
+      when: needs_reboot | default(false)
+
+    - name: Get kernel version after reboot
+      shell: uname -r
+      register: kernel_after
+      changed_when: false
+      when: needs_reboot | default(false)
+
+    - name: Display post-update kernel version
+      debug:
+        msg: "Kernel version after update: {{ kernel_after.stdout }}"
+      when: needs_reboot | default(false)
+
+    - name: Display update summary
+      debug:
+        msg:
+          - "System update completed successfully"
+          - "Kernel before: {{ kernel_before.stdout }}"
+          - "Kernel after: {{ kernel_after.stdout | default('No reboot required') }}"
+          - "Reboot performed: {{ needs_reboot | default(false) }}"

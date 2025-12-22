@@ -1,0 +1,47 @@
+---
+- name: Copy File and Set Permissions
+  hosts: all
+  become: yes
+
+  vars:
+    source_file: "./deploy-script.sh"
+    dest_path: "/opt/scripts/deploy-script.sh"
+
+  tasks:
+    - name: Ensure /opt/scripts directory exists
+      file:
+        path: /opt/scripts
+        state: directory
+        mode: "0755"
+        owner: root
+        group: root
+
+    - name: Copy file from control node to remote host
+      copy:
+        src: "{{ source_file }}"
+        dest: "{{ dest_path }}"
+        owner: root
+        group: root
+        mode: "0755"
+      register: copy_result
+
+    - name: Verify file permissions
+      stat:
+        path: "{{ dest_path }}"
+      register: file_stat
+
+    - name: Display file information
+      debug:
+        msg:
+          - "File successfully copied to {{ dest_path }}"
+          - "Permissions: {{ file_stat.stat.mode }}"
+          - "Owner: {{ file_stat.stat.pw_name }}"
+          - "Group: {{ file_stat.stat.gr_name }}"
+          - "Size: {{ file_stat.stat.size }} bytes"
+
+    - name: Assert correct permissions
+      assert:
+        that:
+          - file_stat.stat.mode == '0755'
+        success_msg: "File permissions correctly set to 0755"
+        fail_msg: "File permissions incorrect"

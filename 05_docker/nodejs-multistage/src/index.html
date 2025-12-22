@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dreams Technologies - Node.js Multi-Stage Build</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1>🚀 Multi-Stage Docker Build</h1>
+        <p class="subtitle">Node.js Application with Nginx</p>
+      </header>
+
+      <main class="main-content">
+        <section class="info-card">
+          <h2>Build Process</h2>
+          <div class="stages">
+            <div class="stage">
+              <div class="stage-number">1</div>
+              <h3>Build Stage</h3>
+              <p>Node.js 18 Alpine</p>
+              <ul>
+                <li>Install dependencies</li>
+                <li>Build application</li>
+                <li>Optimize assets</li>
+              </ul>
+            </div>
+
+            <div class="stage-arrow">→</div>
+
+            <div class="stage">
+              <div class="stage-number">2</div>
+              <h3>Production Stage</h3>
+              <p>Nginx Alpine</p>
+              <ul>
+                <li>Copy built files</li>
+                <li>Configure Nginx</li>
+                <li>Serve static content</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="benefits">
+          <h2>Benefits of Multi-Stage Builds</h2>
+          <div class="benefit-grid">
+            <div class="benefit">
+              <span class="icon">📦</span>
+              <h3>Smaller Image</h3>
+              <p>Only production files in final image</p>
+            </div>
+            <div class="benefit">
+              <span class="icon">🔒</span>
+              <h3>More Secure</h3>
+              <p>No build tools in production</p>
+            </div>
+            <div class="benefit">
+              <span class="icon">⚡</span>
+              <h3>Faster Deployment</h3>
+              <p>Optimized layer caching</p>
+            </div>
+            <div class="benefit">
+              <span class="icon">🎯</span>
+              <h3>Clean Separation</h3>
+              <p>Build vs. runtime concerns</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="tech-stack">
+          <h2>Technology Stack</h2>
+          <div class="tech-list">
+            <span class="tech-badge">Node.js 18</span>
+            <span class="tech-badge">Nginx Alpine</span>
+            <span class="tech-badge">Docker Multi-Stage</span>
+            <span class="tech-badge">Production Ready</span>
+          </div>
+        </section>
+
+        <section class="stats">
+          <div class="stat">
+            <div class="stat-value" id="buildTime">1.2s</div>
+            <div class="stat-label">Build Time</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value" id="imageSize">~25MB</div>
+            <div class="stat-label">Image Size</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value" id="stages">2</div>
+            <div class="stat-label">Build Stages</div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <p>
+          Dreams Technologies DevOps Assignment - Multi-Stage Docker Build Demo
+        </p>
+        <p class="timestamp">Built on: <span id="buildDate"></span></p>
+      </footer>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

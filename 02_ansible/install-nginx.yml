@@ -1,0 +1,68 @@
+---
+# Ansible Playbook: Install Nginx
+
+- name: Install and Start Nginx
+  hosts: webservers
+  become: yes
+
+  tasks:
+    - name: Enable nginx1 from Amazon Linux Extras
+      shell: amazon-linux-extras install -y nginx1
+      args:
+        creates: /usr/sbin/nginx
+
+    - name: Ensure Nginx is started and enabled
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Create custom index page
+      copy:
+        content: |
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>Ansible Deployment Success</title>
+              <style>
+                  body {
+                      font-family: Arial, sans-serif;
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      height: 100vh;
+                      margin: 0;
+                      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                  }
+                  .container {
+                      text-align: center;
+                      color: white;
+                      background: rgba(0,0,0,0.3);
+                      padding: 50px;
+                      border-radius: 15px;
+                  }
+              </style>
+          </head>
+          <body>
+              <div class="container">
+                  <h1>Nginx Installed via Ansible!</h1>
+                  <p>Dreams Technologies DevOps Assignment</p>
+              </div>
+          </body>
+          </html>
+        dest: /usr/share/nginx/html/index.html
+        owner: nginx
+        group: nginx
+        mode: "0644"
+
+    - name: Verify Nginx is running
+      uri:
+        url: http://localhost
+        status_code: 200
+      register: nginx_check
+      retries: 3
+      delay: 2
+
+    - name: Display success message
+      debug:
+        msg: "Nginx successfully installed and running on {{ ansible_hostname }}"

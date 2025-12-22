@@ -1,0 +1,128 @@
+---
+# Deployment with 2 replicas
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+    tier: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+        tier: frontend
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:alpine
+          ports:
+            - containerPort: 80
+              name: http
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          # Custom HTML content
+          volumeMounts:
+            - name: html-content
+              mountPath: /usr/share/nginx/html
+
+      initContainers:
+        - name: init-html
+          image: busybox:latest
+          command:
+            - sh
+            - -c
+            - |
+              cat > /html/index.html <<'EOF'
+              <!DOCTYPE html>
+              <html>
+              <head>
+                  <title>Nginx Deployment</title>
+                  <style>
+                      body {
+                          font-family: Arial, sans-serif;
+                          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                          color: white;
+                          display: flex;
+                          justify-content: center;
+                          align-items: center;
+                          height: 100vh;
+                          margin: 0;
+                      }
+                      .container {
+                          text-align: center;
+                          background: rgba(0,0,0,0.3);
+                          padding: 50px;
+                          border-radius: 15px;
+                      }
+                      h1 { font-size: 3em; margin: 0; }
+                      .info { 
+                          margin-top: 20px; 
+                          background: rgba(255,255,255,0.1);
+                          padding: 20px;
+                          border-radius: 10px;
+                      }
+                  </style>
+              </head>
+              <body>
+                  <div class="container">
+                      <h1>Nginx Deployment</h1>
+                      <p style="font-size: 1.5em;">Running in Kubernetes</p>
+                      <div class="info">
+                          <p><strong>Replicas:</strong> 2</p>
+                          <p><strong>Service Type:</strong> ClusterIP</p>
+                          <p><strong>Dreams Technologies</strong></p>
+                          <p>DevOps Assignment</p>
+                      </div>
+                  </div>
+              </body>
+              </html>
+              EOF
+          volumeMounts:
+            - name: html-content
+              mountPath: /html
+
+      volumes:
+        - name: html-content
+          emptyDir: {}
+
+---
+# ClusterIP Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+  labels:
+    app: nginx
+spec:
+  type: ClusterIP
+  selector:
+    app: nginx
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  sessionAffinity: None

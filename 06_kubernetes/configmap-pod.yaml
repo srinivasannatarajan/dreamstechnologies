@@ -1,0 +1,116 @@
+---
+# ConfigMap with application configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  labels:
+    app: demo-app
+data:
+  APP_ENV: "dev"
+  APP_NAME: "Dreams Technologies Demo"
+  LOG_LEVEL: "info"
+
+---
+# Pod using the ConfigMap as environment variables
+apiVersion: v1
+kind: Pod
+metadata:
+  name: configmap-pod
+  labels:
+    app: demo-app
+    environment: dev
+spec:
+  containers:
+    - name: app-container
+      image: nginx:alpine
+      ports:
+        - containerPort: 80
+
+      # Mount ConfigMap as environment variables
+      envFrom:
+        - configMapRef:
+            name: app-config
+
+      # Additional environment variables
+      env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+
+      resources:
+        requests:
+          memory: "32Mi"
+          cpu: "50m"
+        limits:
+          memory: "64Mi"
+          cpu: "100m"
+
+      # Custom index page showing environment variables
+      volumeMounts:
+        - name: html-volume
+          mountPath: /usr/share/nginx/html
+
+  # Initialize HTML content with ConfigMap values
+  initContainers:
+    - name: init-html
+      image: busybox:latest
+      command:
+        - sh
+        - -c
+        - |
+          cat > /html/index.html <<EOF
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>ConfigMap Demo</title>
+              <style>
+                  body { 
+                      font-family: Arial; 
+                      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                      color: white;
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      height: 100vh;
+                      margin: 0;
+                  }
+                  .container {
+                      background: rgba(0,0,0,0.3);
+                      padding: 40px;
+                      border-radius: 15px;
+                  }
+                  .env-var { 
+                      background: rgba(255,255,255,0.1); 
+                      padding: 10px; 
+                      margin: 10px 0; 
+                      border-radius: 5px;
+                  }
+              </style>
+          </head>
+          <body>
+              <div class="container">
+                  <h1>🔧 Kubernetes ConfigMap Demo</h1>
+                  <h2>Environment Variables:</h2>
+                  <div class="env-var"><strong>APP_ENV:</strong> \$APP_ENV</div>
+                  <div class="env-var"><strong>APP_NAME:</strong> \$APP_NAME</div>
+                  <div class="env-var"><strong>LOG_LEVEL:</strong> \$LOG_LEVEL</div>
+                  <p style="margin-top: 20px;">Dreams Technologies DevOps Assignment</p>
+              </div>
+          </body>
+          </html>
+          EOF
+      volumeMounts:
+        - name: html-volume
+          mountPath: /html
+
+  volumes:
+    - name: html-volume
+      emptyDir: {}
+
+  restartPolicy: Always

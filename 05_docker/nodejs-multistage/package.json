@@ -1,0 +1,18 @@
+{
+  "name": "dreams-tech-nodejs-app",
+  "version": "1.0.0",
+  "description": "Node.js application with multi-stage Docker build",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "node build.js",
+    "dev": "node src/index.js"
+  },
+  "keywords": [
+    "nodejs",
+    "docker",
+    "multistage"
+  ],
+  "author": "Dreams Technologies Candidate",
+  "license": "MIT",
+  "dependencies": {}
+}

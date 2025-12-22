@@ -1,0 +1,84 @@
+{
+  "servers": [
+    {
+      "name": "web-prod-01",
+      "ip_address": "10.0.1.10",
+      "environment": "production",
+      "os": "Ubuntu 22.04",
+      "status": "running",
+      "region": "us-east-1"
+    },
+    {
+      "name": "web-dev-01",
+      "ip_address": "10.0.2.10",
+      "environment": "development",
+      "os": "Ubuntu 22.04",
+      "status": "running",
+      "region": "us-east-1"
+    },
+    {
+      "name": "db-prod-01",
+      "ip_address": "10.0.1.20",
+      "environment": "production",
+      "os": "Amazon Linux 2",
+      "status": "running",
+      "region": "us-east-1"
+    },
+    {
+      "name": "api-staging-01",
+      "ip_address": "10.0.3.10",
+      "environment": "staging",
+      "os": "Ubuntu 22.04",
+      "status": "running",
+      "region": "us-west-2"
+    },
+    {
+      "name": "cache-prod-01",
+      "ip_address": "10.0.1.30",
+      "environment": "production",
+      "os": "Redis Alpine",
+      "status": "running",
+      "region": "us-east-1"
+    },
+    {
+      "name": "web-prod-02",
+      "ip_address": "10.0.1.11",
+      "environment": "production",
+      "os": "Ubuntu 22.04",
+      "status": "running",
+      "region": "us-east-1"
+    },
+    {
+      "name": "monitor-dev-01",
+      "ip_address": "10.0.2.20",
+      "environment": "development",
+      "os": "CentOS 8",
+      "status": "stopped",
+      "region": "us-west-1"
+    },
+    {
+      "name": "lb-prod-01",
+      "ip_address": "10.0.1.5",
+      "environment": "production",
+      "os": "Nginx Alpine",
+      "status": "running",
+      "region": "us-east-1"
+    },
+    {
+      "name": "worker-staging-01",
+      "ip_address": "10.0.3.20",
+      "environment": "staging",
+      "os": "Ubuntu 22.04",
+      "status": "running",
+      "region": "us-west-2"
+    },
+    {
+      "name": "db-prod-02",
+      "ip_address": "10.0.1.21",
+      "environment": "production",
+      "os": "Amazon Linux 2",
+      "status": "running",
+      "region": "us-east-1"
+    }
+  ]
+}
