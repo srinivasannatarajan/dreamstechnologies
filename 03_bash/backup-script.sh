@@ -8,7 +8,7 @@
 
 # Configuration
 SOURCE_DIR="/var/www/html"
-BACKUP_DIR="/backup"
+BACKUP_DIR="/mnt/g/Interview Preparations/dreamstechnologies/03_bash"
 DATE=$(date +%Y-%m-%d)
 BACKUP_FILE="www-backup-${DATE}.tar.gz"
 BACKUP_PATH="${BACKUP_DIR}/${BACKUP_FILE}"

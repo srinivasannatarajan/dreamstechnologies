@@ -11,7 +11,7 @@ from botocore.exceptions import ClientError, NoCredentialsError
 import sys
 
 
-def list_running_instances(region='us-east-1'):
+def list_running_instances(region='ap-south-2'):
     """
     List all running EC2 instances.
     
@@ -116,7 +116,7 @@ def main():
     """Main function."""
     
     # Get region from command line or use default
-    region = sys.argv[1] if len(sys.argv) > 1 else 'us-east-1'
+    region = sys.argv[1] if len(sys.argv) > 1 else 'ap-south-2'
     
     print("\nFetching EC2 instances...")
     list_running_instances(region)
