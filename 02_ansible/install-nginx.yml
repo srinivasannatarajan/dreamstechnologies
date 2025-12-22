@@ -65,4 +65,4 @@
 
     - name: Display success message
       debug:
-        msg: "Nginx successfully installed and running on {{ ansible_hostname }}"
+        msg: "Nginx successfully installed and running"

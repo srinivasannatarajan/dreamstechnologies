@@ -8,7 +8,7 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies (no lockfile present)
+# Install dependencies
 RUN npm install --omit=dev
 
 # Copy source code
