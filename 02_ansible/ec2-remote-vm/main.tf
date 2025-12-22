@@ -74,7 +74,7 @@ resource "aws_instance" "nginx_server" {
   vpc_security_group_ids = [aws_security_group.nginx_sg.id]
 
   tags = {
-    Name        = "nginx-web-server"
+    Name        = "remote-vm-ansible"
     Environment = "development"
     Purpose     = "DevOps Ansible Assignment"
   }
