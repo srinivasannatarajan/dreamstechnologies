@@ -7,7 +7,7 @@
 
   tasks:
     - name: Enable nginx1 from Amazon Linux Extras
-      shell: amazon-linux-extras install -y nginx1
+      shell: amazon-linux-extras install -y nginx
       args:
         creates: /usr/sbin/nginx
 
